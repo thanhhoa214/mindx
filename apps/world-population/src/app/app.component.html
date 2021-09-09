@@ -1,13 +1,4 @@
-<div
-  class="
-    p-3
-    bg-dark
-    text-light
-    d-flex
-    justify-content-between
-    align-items-center
-  "
->
+<div class="p-3 bg-dark text-light d-flex justify-content-between align-items-center">
   <div>
     <img
       width="40"
@@ -17,17 +8,8 @@
     <b class="ml-1">World Population Challenge - MindX</b>
   </div>
   <div>
-    <a
-      type="button"
-      class="btn btn-outline-success"
-      href="assets/myCV.pdf"
-      download
-      >Download My Resume</a
-    >
-    <a
-      href="https://linkedin.com/in/thanhhoa214/"
-      class="linkedin-link"
-      target="_blank"
+    <a type="button" class="btn btn-outline-success" href="assets/myCV.pdf" download>Download My Resume</a>
+    <a href="https://linkedin.com/in/thanhhoa214/" class="linkedin-link" target="_blank"
       ><img src="assets/linkedin.svg" alt="linkedin thanhhoa214"
     /></a>
     <span>Hoà Nguyễn (Rin)</span>
@@ -39,6 +21,7 @@
   *ngIf="{
     worldPopulation: worldPopulation$ | async,
     searchValues: searchValues$ | async,
+    top20Countries: top20Countries$ | async,
     countriesWithDetails: countriesWithDetails$ | async
   } as view"
 >
@@ -54,8 +37,10 @@
     <div class="col-4 border-right">
       <h4>2. Top 20 largest countries by population</h4>
       <ol>
-        <li *ngFor="let countryName of allCountries.slice(0, 20) || []">
-          {{ countryName }}
+        <li *ngFor="let country of view.top20Countries?.items || []">
+          <div class="d-flex justify-content-between">
+            <span>{{ country.country_name }}</span> <span>#{{ country.population }}</span>
+          </div>
         </li>
       </ol>
     </div>
@@ -70,10 +55,7 @@
           >
             {{ view.countriesWithDetails.current_page - 1 }}
           </li>
-          <li
-            class="btn btn-outline-primary mr-2 active cursor-pointer"
-            (click)="loadPage(1)"
-          >
+          <li class="btn btn-outline-primary mr-2 active cursor-pointer">
             {{ view.countriesWithDetails.current_page }}
           </li>
           <li
@@ -83,6 +65,14 @@
           >
             {{ view.countriesWithDetails.current_page + 1 }}
           </li>
+          <ng-container *ngIf="view.countriesWithDetails.total | totalPage: 10 as totalPage">
+            <ng-container *ngIf="view.countriesWithDetails.current_page < totalPage - 2">
+              <span class="mr-1 mt-2">ooo</span>
+              <li class="btn btn-outline-primary mr-2 cursor-pointer" (click)="loadPage(totalPage - 1)">
+                {{ totalPage - 1 }}
+              </li>
+            </ng-container>
+          </ng-container>
         </ul>
       </div>
       <table class="table">
@@ -115,10 +105,8 @@
       placeholder="Enter country name..."
     />
     <div>
-      <button
-        class="btn btn-outline-primary mr-1 mb-1"
-        *ngFor="let con of view.searchValues"
-      >
+      Found {{ view.searchValues?.total }} matches.
+      <button class="btn btn-outline-primary mr-1 mb-1" *ngFor="let con of view.searchValues?.items">
         {{ con }}
       </button>
     </div>

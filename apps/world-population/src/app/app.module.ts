@@ -5,15 +5,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
+import { CommonModule } from '@angular/common';
+import { TotalPagePipe } from './total-page.pipe';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-  ],
+  declarations: [AppComponent, TotalPagePipe],
+  imports: [CommonModule, BrowserModule, ReactiveFormsModule, HttpClientModule, BrowserAnimationsModule],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

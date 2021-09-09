@@ -27,7 +27,13 @@
     ]
   },
   "projects": {
+    "model": {
+      "tags": ["scope:shared"]
+    },
     "world-population": {
+      "tags": []
+    },
+    "world-population-api": {
       "tags": []
     },
     "world-population-e2e": {

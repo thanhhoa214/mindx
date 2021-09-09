@@ -1,6 +1,38 @@
 {
   "version": 1,
   "projects": {
+    "model": {
+      "root": "libs/model",
+      "sourceRoot": "libs/model/src",
+      "projectType": "library",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/workspace:tsc",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/model",
+            "main": "libs/model/src/index.ts",
+            "tsConfig": "libs/model/tsconfig.lib.json",
+            "assets": ["libs/model/*.md"]
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/model/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/model"],
+          "options": {
+            "jestConfig": "libs/model/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "world-population": {
       "projectType": "application",
       "root": "apps/world-population",
@@ -89,6 +121,57 @@
           "outputs": ["coverage/apps/world-population"],
           "options": {
             "jestConfig": "apps/world-population/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "world-population-api": {
+      "root": "apps/world-population-api",
+      "sourceRoot": "apps/world-population-api/src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/world-population-api",
+            "main": "apps/world-population-api/src/main.ts",
+            "tsConfig": "apps/world-population-api/tsconfig.app.json",
+            "assets": ["apps/world-population-api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/world-population-api/src/environments/environment.ts",
+                  "with": "apps/world-population-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "world-population-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/world-population-api/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/world-population-api"],
+          "options": {
+            "jestConfig": "apps/world-population-api/jest.config.js",
             "passWithNoTests": true
           }
         }
